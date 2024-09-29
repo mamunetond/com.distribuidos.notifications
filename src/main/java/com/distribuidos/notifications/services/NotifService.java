@@ -31,7 +31,7 @@ public class NotifService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("mmunetondurango@gmail.com");
+        message.setFrom("mamunetond@eafit.edu.co");
         mailSender.send(message);
     }
 
