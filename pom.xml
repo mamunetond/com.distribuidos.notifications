@@ -48,16 +48,16 @@
           <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <!-- Email notification -->
-         <!--<dependency> -->
-           <!-- <groupId>org.springframework.boot</groupId> -->
-            <!--<artifactId>spring-boot-starter-mail</artifactId> -->
-         <!--</dependency> -->
-         <!-- SMS notification -->
-         <!--<dependency> -->
-            <!--<groupId>com.twilio.sdk</groupId> -->
-            <!--<artifactId>twilio</artifactId> -->
-            <!--<version>8.31.1</version> -->
-        <!-- </dependency> -->
+        <dependency>
+           <groupId>org.springframework.boot</groupId> 
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <!-- SMS notification -->
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio</artifactId>
+            <version>8.31.1</version>
+        </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
