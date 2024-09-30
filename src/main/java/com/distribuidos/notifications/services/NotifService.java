@@ -2,13 +2,8 @@ package com.distribuidos.notifications.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
 
 @Service
 public class NotifService {
@@ -26,27 +21,27 @@ public class NotifService {
     private String fromPhoneNumber;
 
     //Method to send emails
-    public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        message.setFrom("mmunetondurango@gmail.com");
-        mailSender.send(message);
-    }
+    //public void sendEmail(String to, String subject, String body) {
+      //  SimpleMailMessage message = new SimpleMailMessage();
+        //message.setTo(to);
+        //message.setSubject(subject);
+        //message.setText(body);
+        //message.setFrom("mmunetondurango@gmail.com");
+        //mailSender.send(message);
+    //}
 
     //Method to initialize Twilio
-    private void initTwilio(){
-        Twilio.init(accountSid, accountSid);
-    }
+    //private void initTwilio(){
+      //  Twilio.init(accountSid, accountSid);
+    //}
 
-    public void sendSms(String toPhoneNumber, String body) {
-        initTwilio();
+    //public void sendSms(String toPhoneNumber, String body) {
+      //  initTwilio();
 
-        Message message = Message.creator(
-            new PhoneNumber(toPhoneNumber),
-            new PhoneNumber(fromPhoneNumber),
-            body) //SMS cotent
-            .create();
-    }
+        //Message message = Message.creator(
+          //  new PhoneNumber(toPhoneNumber),
+            //new PhoneNumber(fromPhoneNumber),
+            //body) //SMS cotent
+            //.create();
+    //}
 }
