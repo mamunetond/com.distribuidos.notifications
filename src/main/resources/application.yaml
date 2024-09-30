@@ -12,26 +12,26 @@ spring:
     lazy-initialization: true
 ---
 # ENVIRONMENT
-environment:
-  security-disable-ssl-cert-validation: ${DISABLE_SSL_CERT_VALIDATION:false}
-  operator-id: ${OPERATOR_ID:66dfa51b4d8f56001517a04c}
-  operator-name: ${OPERATOR_NAME:ArchivoFiel}
-  domains:
-    base: https://gcp-domain
-    users-domain: ${USERS_DOMAIN:${environment.domains.base}/ssh-guest-search/v1}
-    centralizer-domain: ${CENTRALIZER_DOMAIN:https://govcarpeta-apis-83e1c996379d.herokuapp.com/apis}
-  service-retry:
-    max-attempts: ${SERVICE_RETRY_MAX_ATTEMPTS:2}
-  service-name: distribuidos/authentication
-  max-payload-size-in-mb: ${MAX_PAYLOAD_SIZE_IN_MB:10}
+#environment:
+ # security-disable-ssl-cert-validation: ${DISABLE_SSL_CERT_VALIDATION:false}
+  #operator-id: ${OPERATOR_ID:66dfa51b4d8f56001517a04c}
+  #operator-name: ${OPERATOR_NAME:ArchivoFiel}
+  #domains:
+   # base: https://gcp-domain
+    #users-domain: ${USERS_DOMAIN:${environment.domains.base}/ssh-guest-search/v1}
+    #centralizer-domain: ${CENTRALIZER_DOMAIN:https://govcarpeta-apis-83e1c996379d.herokuapp.com/apis}
+  #service-retry:
+   # max-attempts: ${SERVICE_RETRY_MAX_ATTEMPTS:2}
+  #service-name: distribuidos/authentication
+  #max-payload-size-in-mb: ${MAX_PAYLOAD_SIZE_IN_MB:10}
 ---
 # R2DBC
-spring:
-  r2dbc:
-    show-sql: true
-    url: r2dbc:pool:mysql://localhost:3306/transfers
-    username: ${DB_USER:root}
-    password: ${DB_PASSWORD:zeus987*}
+#spring:
+ # r2dbc:
+  #  show-sql: true
+   # url: r2dbc:pool:mysql://localhost:3306/transfers
+    #username: ${DB_USER:root}
+    #password: ${DB_PASSWORD:zeus987*}
 ---
 # Logging
 logging:
