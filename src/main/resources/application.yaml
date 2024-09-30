@@ -58,12 +58,11 @@ spring:
 
 #SMS Notification
 twilio:
-      account:
-      sid: AC1aba8e53a1cb4ee54a6bb9706c488161
-      auth:
-      token: 13b8eb4af318051be6d03efc88015d37
-      phone:
-            number: +19109361179
-
+  account:
+    sid: AC1aba8e53a1cb4ee54a6bb9706c488161
+  auth:
+    token: 13b8eb4af318051be6d03efc88015d37
+  phone:
+    number: +19109361179
 
 
