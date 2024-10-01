@@ -2,36 +2,51 @@ package com.distribuidos.notifications;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import com.distribuidos.notifications.exceptions.InvalidInputException;
 import com.distribuidos.notifications.services.NotifService;
-import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.rest.api.v2010.account.MessageCreator;
+import com.twilio.type.PhoneNumber;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Message.class) // Prepare the Message class for mocking static methods
 public class NotifServiceTest {
 
     @Mock
     private JavaMailSender mailSender; // Simulate sending emails
 
     @InjectMocks
-    private NotifService notifService; // The service we want to try
+    private NotifService notifService; // The service we want to test
 
-    @BeforeEach
+    @Mock
+    private MessageCreator messageCreator; // Mock the MessageCreator from Twilio
+
+    @Mock
+    private Message message; // Mock the Twilio Message response
+
+    @Before
     public void setUp() {
-        MockitoAnnotations.openMocks(this); // Initialize the mocks
+        MockitoAnnotations.initMocks(this); // Initialize the mocks
+        mockStatic(Message.class); // Mock static methods in Message class
     }
 
-    // Test to send valid emails
     @Test
     public void testSendEmailValid() {
-        String to = "example@example.com";
+        String to = "mmunetondurango@gmail.com";
         String subject = "Test Subject";
         String body = "Test Body";
 
@@ -42,7 +57,6 @@ public class NotifServiceTest {
         verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
     }
 
-    // Test to send invalid emails
     @Test
     public void testSendEmailInvalid() {
         String to = "invalid-email"; // invalid email
@@ -53,27 +67,32 @@ public class NotifServiceTest {
         try {
             notifService.sendEmail(to, subject, body);
         } catch (InvalidInputException e) {
-            assert(e.getMessage().contains("Invalid email"));
+            assert (e.getMessage().contains("Invalid email"));
         }
 
         // Verify that the email has NOT been sent
         verify(mailSender, times(0)).send(any(SimpleMailMessage.class));
     }
 
-    // Test to send a valid SMS
     @Test
     public void testSendSmsValid() {
-        String toPhoneNumber = "+1234567890";
+        String toPhoneNumber = "+573166399954";
         String body = "Test SMS Body";
 
-        // Simulate Twilio behavior
-        Twilio.init("testSid", "testToken"); // Simulate Twilio initialization
+        // Mock the static method Message.creator
+        when(Message.creator(any(PhoneNumber.class), any(PhoneNumber.class), anyString()))
+            .thenReturn(messageCreator);
+
+        // Mock the behavior of the message creation
+        when(messageCreator.create()).thenReturn(message);
+
+        // Call the method to test
         notifService.sendSms(toPhoneNumber, body);
 
-
+        // Verify that the Message.creator was called with the correct parameters
+        verify(messageCreator, times(1)).create();
     }
 
-    // Test to send an invalid SMS
     @Test
     public void testSendSmsInvalid() {
         String toPhoneNumber = "123"; // Invalid phone number
@@ -83,7 +102,10 @@ public class NotifServiceTest {
         try {
             notifService.sendSms(toPhoneNumber, body);
         } catch (InvalidInputException e) {
-            assert(e.getMessage().contains("Invalid phone number"));
+            assert (e.getMessage().contains("Invalid phone number"));
         }
+
+        // Verify that the Message.creator was not called because of the invalid phone number
+        verify(messageCreator, times(0)).create();
     }
 }
