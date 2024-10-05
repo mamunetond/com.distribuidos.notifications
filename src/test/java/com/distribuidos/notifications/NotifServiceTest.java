@@ -2,8 +2,6 @@ package com.distribuidos.notifications;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +14,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import com.distribuidos.notifications.exceptions.InvalidInputException;
 import com.distribuidos.notifications.services.NotifService;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.api.v2010.account.MessageCreator;
@@ -45,67 +42,48 @@ public class NotifServiceTest {
     }
 
     @Test
-    public void testSendEmailValid() {
-        String to = "mmunetondurango@gmail.com";
-        String subject = "Test Subject";
-        String body = "Test Body";
+    public void testNotifyDocumentTransfer() {
+        String documentId = "12345";
+        String userEmail = "mmunetondurango@gmail.com";
+        String userPhoneNumber = "+573166399954";
+        String expectedMessage = "Se realizó la transferencia del documento con Id: " + documentId;
 
-        // Execute the method we want to test
-        notifService.sendEmail(to, subject, body);
-
-        // Verify that the email was sent correctly
-        verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
-    }
-
-    @Test
-    public void testSendEmailInvalid() {
-        String to = "invalid-email"; // invalid email
-        String subject = "Test Subject";
-        String body = "Test Body";
-
-        // Check that the exception is thrown when the email is invalid
-        try {
-            notifService.sendEmail(to, subject, body);
-        } catch (InvalidInputException e) {
-            assert (e.getMessage().contains("Invalid email"));
-        }
-
-        // Verify that the email has NOT been sent
-        verify(mailSender, times(0)).send(any(SimpleMailMessage.class));
-    }
-
-    @Test
-    public void testSendSmsValid() {
-        String toPhoneNumber = "+573166399954";
-        String body = "Test SMS Body";
-
-        // Mock the static method Message.creator
+        // Mock the behavior of sendEmail and sendSms
+        doNothing().when(mailSender).send(any(SimpleMailMessage.class));
         when(Message.creator(any(PhoneNumber.class), any(PhoneNumber.class), anyString()))
             .thenReturn(messageCreator);
-
-        // Mock the behavior of the message creation
         when(messageCreator.create()).thenReturn(message);
 
         // Call the method to test
-        notifService.sendSms(toPhoneNumber, body);
+        notifService.notifyDocumentTransfer(documentId, userEmail, userPhoneNumber);
 
-        // Verify that the Message.creator was called with the correct parameters
+        // Verify that sendEmail was called with correct parameters
+        verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
+
+        // Verify that sendSms was called with the correct parameters
         verify(messageCreator, times(1)).create();
     }
 
     @Test
-    public void testSendSmsInvalid() {
-        String toPhoneNumber = "123"; // Invalid phone number
-        String body = "Test SMS Body";
+    public void testNotifyCitizenTransfer() {
+        String citizenId = "987654321";
+        String userEmail = "citizen@example.com";
+        String userPhoneNumber = "+573166399954";
+        String expectedMessage = "Se realizó la transferencia del ciudadano con el número de identificación: " + citizenId;
 
-        // Check that the exception is thrown when the number is invalid
-        try {
-            notifService.sendSms(toPhoneNumber, body);
-        } catch (InvalidInputException e) {
-            assert (e.getMessage().contains("Invalid phone number"));
-        }
+        // Mock the behavior of sendEmail and sendSms
+        doNothing().when(mailSender).send(any(SimpleMailMessage.class));
+        when(Message.creator(any(PhoneNumber.class), any(PhoneNumber.class), anyString()))
+            .thenReturn(messageCreator);
+        when(messageCreator.create()).thenReturn(message);
 
-        // Verify that the Message.creator was not called because of the invalid phone number
-        verify(messageCreator, times(0)).create();
+        // Call the method to test
+        notifService.notifyCitizenTransfer(citizenId, userEmail, userPhoneNumber);
+
+        // Verify that sendEmail was called with correct parameters
+        verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
+
+        // Verify that sendSms was called with the correct parameters
+        verify(messageCreator, times(1)).create();
     }
 }

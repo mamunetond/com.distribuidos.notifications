@@ -57,6 +57,28 @@ public class NotifService {
             new PhoneNumber(fromPhoneNumber),
             body).create();
     }
+
+    //Method Notify Document Transfer
+    public void notifyDocumentTransfer(String documentId, String userEmail, String userPhoneNumber) {
+        String message = "Se realizó la transferencia del documento con Id: " + documentId;
+    
+        // Send mail
+        sendEmail(userEmail, "Transferencia de Documento", message);
+    
+        // Send SMS
+        sendSms(userPhoneNumber, message);
+    }
+    
+    //Method Notify Citizen Transfer
+    public void notifyCitizenTransfer(String citizenId, String userEmail, String userPhoneNumber) {
+        String message = "Se realizó la transferencia del ciudadano con el número de identificación: " + citizenId;
+    
+        // Send mail
+        sendEmail(userEmail, "Transferencia de Ciudadano", message);
+    
+        // Send SMS
+        sendSms(userPhoneNumber, message);
+    }
     
     // Custom validation for phone numbers using regular expressions
     private boolean isValidPhoneNumber(String phoneNumber) {
