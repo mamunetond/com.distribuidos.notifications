@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: notifications
-        image: com.distribuidos.notifications.v2:latest
+        image: ma27d/com.distribuidos.notifications.v2
         ports:
         - containerPort: 80
 ---
