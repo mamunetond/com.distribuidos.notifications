@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: notifications
-        image: public.ecr.aws/i2g9d5i9/namespace/com.distribuidos.notifications:latest
+        image: com.distribuidos.notifications.v2:latest
         ports:
         - containerPort: 80
 ---
